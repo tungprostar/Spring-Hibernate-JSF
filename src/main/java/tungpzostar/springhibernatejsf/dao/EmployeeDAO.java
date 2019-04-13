@@ -9,8 +9,7 @@ public interface EmployeeDAO {
 
 	List<Employee> getAll();
 	Employee get(int id);
-	void update(Employee emp);
 	void delete(int id);
-	void add(Employee emp);
+	void addOrUpdate(Employee emp);
 	String formatDate(Date d);
 }

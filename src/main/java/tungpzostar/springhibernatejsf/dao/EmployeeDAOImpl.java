@@ -12,8 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import tungpzostar.springhibernatejsf.entity.Department;
 import tungpzostar.springhibernatejsf.entity.Employee;
 import tungpzostar.springhibernatejsf.service.EmployeeServiceImpl;
 
@@ -27,11 +29,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	private EntityManager entityManager;
 	
 	@Override
+	@Transactional
 	public List<Employee> getAll() {
 		Session currentSession = entityManager.unwrap(Session.class);
-		Query query = currentSession.createQuery("from Employee", Employee.class);
-		List<Employee> lstEmp = query.getResultList();
-		System.out.println("lstEmp size: " +lstEmp.size());
+		
+		// Fix no session error using JOIN FETCH
+		Query query = currentSession.createQuery("select e from Employee e"
+				+ " JOIN FETCH e.dept", Employee.class);
+		List<Employee> lstEmp = query.list();
 		return lstEmp;
 	}
 
@@ -42,22 +47,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	}
 
 	@Override
-	public void update(Employee emp) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void delete(int id) {
-		// TODO Auto-generated method stub
-
+		Session currentSession = entityManager.unwrap(Session.class);
+		
+		Employee emp = currentSession.find(Employee.class, id);
+		currentSession.remove(emp);
 	}
 
 	@Override
-	@Transactional
-	public void add(Employee emp) {
+	public void addOrUpdate(Employee emp) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		currentSession.saveOrUpdate(emp);
+		currentSession.merge(emp);
 	}
 
 	@Override

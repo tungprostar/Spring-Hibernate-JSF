@@ -1,8 +1,9 @@
 package tungpzostar.springhibernatejsf.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +11,17 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 @Entity
 @Table(name="dept")
-@ManagedBean(name="department")
-public class Department {
+@Component
+public class Department implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name="deptno")
@@ -69,4 +77,12 @@ public class Department {
 		this.lstEmployees = lstEmployees;
 	}
 	
+	//Helper method
+	public void addEmployee(Employee e) {
+		if(lstEmployees == null) {
+			lstEmployees = new ArrayList<Employee>();
+		}
+		lstEmployees.add(e);
+		e.setDept(this);
+	}
 }

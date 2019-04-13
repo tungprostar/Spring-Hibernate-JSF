@@ -1,43 +1,44 @@
 package tungpzostar.springhibernatejsf.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
-import org.primefaces.component.row.Row;
+import org.primefaces.event.RowEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import tungpzostar.springhibernatejsf.dao.EmployeeDAO;
 import tungpzostar.springhibernatejsf.entity.Employee;
 
 @Service
-//@ManagedBean(name = "employeeService")
-@Component(value="employeeService")
+@Component(value = "employeeService")
 @SessionScoped
 public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeDAO employeeDAO;
-	
+
 	private List<Employee> lstEmp;
-	
-	private Employee emp = new Employee();
-	
-	private String name = "easdas";
+
 	@Override
-	@Transactional
+
 	public List<Employee> getAll() {
-		System.out.println("===============> INSIDE getAll() method from service layer");
-		if(lstEmp == null) {
-			lstEmp = employeeDAO.getAll();
-		}
+		lstEmp = employeeDAO.getAll();
 		return lstEmp;
+	}
+
+	@PostConstruct
+	public void init() {
+		lstEmp = employeeDAO.getAll();
 	}
 
 	@Override
@@ -47,20 +48,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public void update(Employee emp) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
+	@Transactional
 	public void delete(int id) {
-		// TODO Auto-generated method stub
-
+		employeeDAO.delete(id);
 	}
 
 	@Override
-	public void add(Employee emp) {
-		employeeDAO.add(emp);
+	@Transactional
+	public void addOrUpdate(Employee emp) {
+		System.out.println(emp.geteName());
+		employeeDAO.addOrUpdate(emp);
 	}
 
 	@Override
@@ -68,16 +65,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDAO.formatDate(d);
 	}
 
-//	@Override
-//	public int unboxing(Integer i) {
-//		return employeeDAO.unboxing(i);
-//	}
-//
-//	@Override
-//	public float unboxing(Float f) {
-//		return employeeDAO.unboxing(f);
-//	}
-//
+	public static void onRowCancel(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage("Employee Edited", "" + ((Employee) event.getObject()).getEmpNo());
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
 
-	
+	public List<Employee> getLstEmp() {
+		return lstEmp;
+	}
+
+	public void setLstEmp(List<Employee> lstEmp) {
+		this.lstEmp = lstEmp;
+	}
+
 }

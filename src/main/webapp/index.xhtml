@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,52 +7,58 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
 <h:head>
 	<title>Home page</title>
 
 </h:head>
 <h:body>
-	<h3>Add a Employee:</h3>
-<!-- 	<h:form> -->
-<!-- 		<h:panelGrid columns="2" cellpadding="5"> -->
-<!-- 			<p:outputLabel value="Name: " for="ename" /> -->
-<!-- 			<p:inputText id="ename" value="#{employeeService.emp.eName}" /> -->
-<!-- 			<p:outputLabel value="Job: " for="ejob" /> -->
-<!-- 			<p:inputText id="ejob" value="#{employeeService.emp.job}" /> -->
-<!-- 			<p:outputLabel value="Mgr: " for="emgr" /> -->
-<!-- 			<p:inputText id="emgr" value="#{employeeService.emp.mgr}" /> -->
-<!-- 			<p:outputLabel value="Hiredate: " for="ehd" /> -->
-<!-- 			<p:inputText id="ehd" value="#{employeeService.emp.hireDate}" /> -->
-<!-- 			<p:outputLabel value="Salary: " for="esal" /> -->
-<!-- 			<p:inputText id="esal" value="#{employeeService.emp.sal}" /> -->
-<!-- 			<p:outputLabel value="Commision: " for="ecomm" /> -->
-<!-- 			<p:inputText id="ecomm" value="#{employeeService.emp.comm}" /> -->
-<!-- 			<p:outputLabel value="Department no: " for="edeptno" /> -->
-<!-- 			<p:inputText id="edeptno" value="#{employeeService.emp.dept.deptNo}" /> -->
-<!-- 		</h:panelGrid> -->
-<!-- 		 <p:commandButton value="Submit" action="#{employeeService.add(employee)}"/> -->
-<!-- 	</h:form> -->
-	a:<h:outputText value="#{conCac.name}" />
-	
-	<hr></hr>
 	<h:form>
-		<p:dataTable id="employee" var="emp"
-			value="#{employeeService.getAll()}" editable="true"
+		<!-- 		<p:growl id="msgs" showDetail="true" /> -->
+		<h3>Add a Employee:</h3>
+		<h:panelGrid columns="2" cellpadding="5" id="empForm">
+			<p:outputLabel value="Name: " for="ename" />
+			<p:inputText id="ename" value="#{employee.eName}" />
+			<p:outputLabel value="Job: " for="ejob" />
+			<p:inputText id="ejob" value="#{employee.job}" />
+			<p:outputLabel value="Mgr: " for="emgr" />
+			<p:inputText id="emgr" value="#{employee.mgr}" />
+			<p:outputLabel for="ehd" value="Hiredate: " />
+			<p:calendar id="ehd" value="#{employee.hireDate}" />
+			<p:outputLabel value="Salary: " for="esal" />
+			<p:inputText id="esal" value="#{employee.sal}" />
+			<p:outputLabel value="Commision: " for="ecomm" />
+			<p:inputText id="ecomm" value="#{employee.comm}" />
+			<p:outputLabel value="Department no: " for="edeptno" />
+			<p:inputText id="edeptno" value="#{employee.dept.deptNo}" />
+		</h:panelGrid>
+		<p:commandButton value="Submit"
+			action="#{employeeService.addOrUpdate(employee)}" update="@form" />
+		<p:commandButton value="Reset " update="empForm" process="@this"
+			action="#{employee.reset()}" style="margin-right:20px;" />
+		<hr></hr>
+		<f:event type="postAddToView" listener="#{employeeService.getAll}" />
+		<p:dataTable id="employeeTable" var="emp"
+			value="#{employeeService.lstEmp}" editable="true"
 			style="margin-bottom:20px">
 			<f:facet name="header">
             	Employee
-        	</f:facet>
+            	<div style="float:right">
+            	<h:commandLink value="export to excel">
+					<p:dataExporter type="xls" target="employeeTable"
+						fileName="employee-data" />
+				</h:commandLink>
+            	</div>
+			</f:facet>
+			<p:ajax event="rowEdit"
+				listener="#{employeeService.addOrUpdate(emp)}"
+				update="employeeTable" />
+			<p:ajax event="rowEditCancel"
+				listener="#{employeeService.onRowCancel}" />
 			<p:column headerText="EMPNO" sortBy="#{emp.empNo}">
-				<p:cellEditor>
-					<f:facet name="output">
-						<h:outputText value="#{emp.empNo}" />
-					</f:facet>
-					<f:facet name="input">
-						<p:inputText id="modelInput" value="#{emp.empNo}"
-							style="width:100%" />
-					</f:facet>
-				</p:cellEditor>
+				<h:outputText value="#{emp.empNo}" />
 			</p:column>
 
 			<p:column headerText="ENAME" sortBy="#{emp.eName}">
@@ -86,13 +93,16 @@
 			</p:column>
 			<p:column headerText="HIREDATE" sortBy="#{emp.hireDate}">
 				<p:cellEditor>
+
 					<f:facet name="output">
-						<h:outputText value="#{employeeService.formatDate(emp.hireDate)}" />
+						<h:outputText
+							value="#{emp.hireDate != null ? employeeService.formatDate(emp.hireDate) : ''}" />
 					</f:facet>
 					<f:facet name="input">
-						<p:inputText value="#{employeeService.formatDate(emp.hireDate)}"
-							style="width:100%" label="hiredate" />
+						<p:calendar value="#{emp.hireDate}" style="width:100%"
+							label="hiredate" />
 					</f:facet>
+
 				</p:cellEditor>
 			</p:column>
 			<p:column headerText="SAL" sortBy="#{emp.sal}">
@@ -126,8 +136,14 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			<p:column style="width:35px">
+			<p:column style="width:25px" exportable="false">
 				<p:rowEditor />
+			</p:column>
+			<p:column style="width:50px" exportable="false">
+				<p:commandLink id="ajax"
+					action="#{employeeService.delete(emp.empNo)}" update="@form">
+					<h:outputText value="Delete" />
+				</p:commandLink>
 			</p:column>
 		</p:dataTable>
 	</h:form>

@@ -3,7 +3,8 @@ package tungpzostar.springhibernatejsf.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.faces.bean.ManagedBean;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,9 +17,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.primefaces.context.PrimeFacesContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Entity
 @Table(name="emp")
-@ManagedBean
+@Component
 public class Employee implements Serializable{
 
 	/**
@@ -52,6 +57,7 @@ public class Employee implements Serializable{
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(name="deptno")
+	@Autowired
 	private Department dept;
 	
 	public Employee() {
@@ -133,6 +139,17 @@ public class Employee implements Serializable{
 
 	public void setDept(Department dept) {
 		this.dept = dept;
+	}
+	
+	//Reset input method
+	public void reset() {
+		this.empNo = null;
+		this.eName = null;
+		this.job = null;
+		this.mgr = null;
+		this.hireDate = null;
+		this.sal = null;
+		this.comm = null;
 	}
 	
 }
