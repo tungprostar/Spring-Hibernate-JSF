@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Home page</title>
+
+</h:head>
+<h:body>
+	<h3>Add a Employee:</h3>
+<!-- 	<h:form> -->
+<!-- 		<h:panelGrid columns="2" cellpadding="5"> -->
+<!-- 			<p:outputLabel value="Name: " for="ename" /> -->
+<!-- 			<p:inputText id="ename" value="#{employeeService.emp.eName}" /> -->
+<!-- 			<p:outputLabel value="Job: " for="ejob" /> -->
+<!-- 			<p:inputText id="ejob" value="#{employeeService.emp.job}" /> -->
+<!-- 			<p:outputLabel value="Mgr: " for="emgr" /> -->
+<!-- 			<p:inputText id="emgr" value="#{employeeService.emp.mgr}" /> -->
+<!-- 			<p:outputLabel value="Hiredate: " for="ehd" /> -->
+<!-- 			<p:inputText id="ehd" value="#{employeeService.emp.hireDate}" /> -->
+<!-- 			<p:outputLabel value="Salary: " for="esal" /> -->
+<!-- 			<p:inputText id="esal" value="#{employeeService.emp.sal}" /> -->
+<!-- 			<p:outputLabel value="Commision: " for="ecomm" /> -->
+<!-- 			<p:inputText id="ecomm" value="#{employeeService.emp.comm}" /> -->
+<!-- 			<p:outputLabel value="Department no: " for="edeptno" /> -->
+<!-- 			<p:inputText id="edeptno" value="#{employeeService.emp.dept.deptNo}" /> -->
+<!-- 		</h:panelGrid> -->
+<!-- 		 <p:commandButton value="Submit" action="#{employeeService.add(employee)}"/> -->
+<!-- 	</h:form> -->
+	a:<h:outputText value="#{conCac.name}" />
+	
+	<hr></hr>
+	<h:form>
+		<p:dataTable id="employee" var="emp"
+			value="#{employeeService.getAll()}" editable="true"
+			style="margin-bottom:20px">
+			<f:facet name="header">
+            	Employee
+        	</f:facet>
+			<p:column headerText="EMPNO" sortBy="#{emp.empNo}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.empNo}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText id="modelInput" value="#{emp.empNo}"
+							style="width:100%" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column headerText="ENAME" sortBy="#{emp.eName}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.eName}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.eName}" style="width:100%" label="name" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="JOB" sortBy="#{emp.job}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.job}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.job}" style="width:100%" label="job" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="MGR" sortBy="#{emp.mgr}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.mgr}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.mgr}" style="width:100%" label="mgr" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="HIREDATE" sortBy="#{emp.hireDate}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{employeeService.formatDate(emp.hireDate)}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{employeeService.formatDate(emp.hireDate)}"
+							style="width:100%" label="hiredate" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="SAL" sortBy="#{emp.sal}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.sal}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.sal}" style="width:100%" label="sal" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="COMM" sortBy="#{emp.comm}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.comm}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.comm}" style="width:100%" label="comm" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column headerText="DEPTNO" sortBy="#{emp.dept.deptNo}">
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{emp.dept.deptNo}" />
+					</f:facet>
+					<f:facet name="input">
+						<p:inputText value="#{emp.dept.deptNo}" style="width:100%"
+							label="deptno" />
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column style="width:35px">
+				<p:rowEditor />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>
