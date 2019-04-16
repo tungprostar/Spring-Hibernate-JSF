@@ -12,4 +12,5 @@ public interface EmployeeDAO {
 	void delete(int id);
 	void addOrUpdate(Employee emp);
 	String formatDate(Date d);
+	List<Employee> formatList(String jobName, Date hireDate);
 }

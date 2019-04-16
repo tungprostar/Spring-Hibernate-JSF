@@ -11,6 +11,5 @@ public interface EmployeeService {
 	Employee get(int id);
 	void delete(int id);
 	void addOrUpdate(Employee emp);
-	String formatDate(Date d);
-
+	void formatList(String jobName, Date hireDate) throws Exception;
 }

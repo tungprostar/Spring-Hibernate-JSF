@@ -1,8 +1,8 @@
 package tungpzostar.springhibernatejsf.entity;
 
-import org.springframework.stereotype.Component;
+import javax.faces.bean.ManagedBean;
 
-@Component
+@ManagedBean
 public class Client {
 
 	private String clientName;

@@ -24,17 +24,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 	private Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 	private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	@Autowired
 	private EntityManager entityManager;
-	
+
 	@Override
+	@Transactional
 	public List<Employee> getAll() {
 		Session currentSession = entityManager.unwrap(Session.class);
-		
+
 		// Fix no session error using JOIN FETCH
-		Query query = currentSession.createQuery("select e from Employee e"
-				+ " JOIN FETCH e.dept", Employee.class);
+		Query query = currentSession.createQuery("select e from Employee e" + " JOIN FETCH e.dept", Employee.class);
 		List<Employee> lstEmp = query.list();
 		return lstEmp;
 	}
@@ -48,7 +48,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	@Override
 	public void delete(int id) {
 		Session currentSession = entityManager.unwrap(Session.class);
-		
+
 		Employee emp = currentSession.find(Employee.class, id);
 		currentSession.remove(emp);
 	}
@@ -64,5 +64,34 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		String date = format.format(d);
 		return date;
 	}
-	
+
+	@Override
+	public List<Employee> formatList(String jobName, Date hireDate) {
+		Session currentSession = entityManager.unwrap(Session.class);
+		if (jobName == null && hireDate == null) {
+			return getAll();
+		} else {
+			String strQuery = "select e from Employee e" + " JOIN FETCH e.dept";
+			if (jobName != null)
+				strQuery += " where e.job = :job";
+			if (hireDate != null)
+				strQuery += " where e.hireDate = :hireDate";
+			if (jobName != null && hireDate != null) {
+				strQuery = "select e from Employee e JOIN FETCH e.dept where e.job = :job and e.hireDate = :hireDate";
+			}
+			System.out.println(strQuery);
+			Query query = currentSession.createQuery(strQuery, Employee.class);
+			if (jobName != null && hireDate != null) {
+				query.setParameter("hireDate", hireDate);
+				query.setParameter("job", jobName);
+			}
+			if (hireDate != null)
+				query.setParameter("hireDate", hireDate);
+			if (jobName != null)
+				query.setParameter("job", jobName);
+			List<Employee> lstEmp = query.getResultList();
+			return lstEmp;
+		}
+	}
+
 }

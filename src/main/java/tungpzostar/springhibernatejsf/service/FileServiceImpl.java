@@ -19,7 +19,6 @@ import tungpzostar.springhibernatejsf.entity.Client;
 
 @Service
 @Component(value="fileService")
-@ManagedBean
 @Scope("session")
 public class FileServiceImpl implements FileService {
 
@@ -47,27 +46,6 @@ public class FileServiceImpl implements FileService {
             FacesMessage message = new FacesMessage("Succesful", file.getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-    }
-
-	public List<Client> getLstClient() {
-		return lstClient;
-	}
-
-	public void setLstClient(List<Client> lstClient) {
-		this.lstClient = lstClient;
-	}
-
-	public UploadedFile getFile() {
-		return file;
-	}
-
-	public void setFile(UploadedFile file) {
-		this.file = file;
-	}
-	
-	public void handleFileUpload(FileUploadEvent event) {
-        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
 }
