@@ -16,7 +16,6 @@
 </h:head>
 <h:body>
 	<h:form>
-		<!-- 		<p:growl id="msgs" showDetail="true" /> -->
 		<h3>Add a Employee:</h3>
 		<h:panelGrid columns="2" cellpadding="5" id="empForm">
 			<p:outputLabel value="Name: " for="ename" />
@@ -35,22 +34,27 @@
 			<p:inputText id="edeptno" value="#{employee.dept.deptNo}" />
 		</h:panelGrid>
 		<p:commandButton value="Submit"
-			action="#{employeeService.addOrUpdate(employee)}" update="@form" />
-		<p:commandButton value="Reset " update="empForm" process="@this"
+			action="#{employeeService.addOrUpdate(employee)}" update="form2" />
+		<p:commandButton value="Reset " update="@form"
 			action="#{employee.reset()}" style="margin-right:20px;" />
 		<hr></hr>
-		<f:event type="postAddToView" listener="#{employeeService.getAll}" />
+
+	</h:form>
+	<h:form id="form2">
+
+		<!-- Webel -->
+		<f:view>
+			<f:metadata>
+				<f:event type="preRenderView" listener="#{employeeService.reset()}" />
+			</f:metadata>
+		</f:view>
+
 		<p:dataTable id="employeeTable" var="emp"
-			value="#{employeeService.lstEmp}" editable="true"
+			value="#{employeeService.getSampleAll()}" editable="true"
 			style="margin-bottom:20px">
 			<f:facet name="header">
             	Employee
-            	<div style="float:right">
-            	<h:commandLink value="export to excel">
-					<p:dataExporter type="xls" target="employeeTable"
-						fileName="employee-data" />
-				</h:commandLink>
-            	</div>
+            	
 			</f:facet>
 			<p:ajax event="rowEdit"
 				listener="#{employeeService.addOrUpdate(emp)}"
@@ -71,7 +75,8 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			<p:column headerText="JOB" sortBy="#{emp.job}">
+			<p:column headerText="JOB" sortBy="#{emp.job}" filterBy="#{emp.job}"
+				filterMatchMode="contains">
 				<p:cellEditor>
 					<f:facet name="output">
 						<h:outputText value="#{emp.job}" />
@@ -91,18 +96,21 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			<p:column headerText="HIREDATE" sortBy="#{emp.hireDate}">
-				<p:cellEditor>
+			<p:column headerText="HIREDATE" sortBy="#{emp.hireDate}"
+				filterMatchMode="contains" filterBy="#{emp.hireDate}">
 
+				<p:cellEditor>
 					<f:facet name="output">
-						<h:outputText
-							value="#{emp.hireDate != null ? employeeService.formatDate(emp.hireDate) : ''}" />
+
+						<h:outputText value="#{emp.hireDate}">
+							<f:convertDateTime pattern="dd-MM-yyyy" />
+						</h:outputText>
+
 					</f:facet>
 					<f:facet name="input">
 						<p:calendar value="#{emp.hireDate}" style="width:100%"
 							label="hiredate" />
 					</f:facet>
-
 				</p:cellEditor>
 			</p:column>
 			<p:column headerText="SAL" sortBy="#{emp.sal}">
@@ -146,6 +154,26 @@
 				</p:commandLink>
 			</p:column>
 		</p:dataTable>
+	</h:form>
+	<hr></hr>
+	<h:form>
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:commandLink value="export to excel">
+				<p:dataExporter type="xls" target="form2:employeeTable"
+					fileName="employee-data" />
+			</h:commandLink>
+		</h:panelGrid>
+	</h:form>
+	<hr></hr>
+	<h:form enctype="multipart/form-data">
+		<p:growl id="messages" showDetail="true" />
+
+		<p:fileUpload value="#{fileService.file}" mode="simple" skinSimple="true" />
+
+		<br />
+		<br />
+
+		<p:commandButton value="Submit" ajax="false" action="#{fileService.upload}" />
 	</h:form>
 </h:body>
 </html>

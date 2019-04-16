@@ -29,7 +29,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 	private EntityManager entityManager;
 	
 	@Override
-	@Transactional
 	public List<Employee> getAll() {
 		Session currentSession = entityManager.unwrap(Session.class);
 		
@@ -65,5 +64,5 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 		String date = format.format(d);
 		return date;
 	}
-
+	
 }

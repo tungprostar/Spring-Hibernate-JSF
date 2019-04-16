@@ -2,6 +2,7 @@ package tungpzostar.springhibernatejsf.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -75,7 +76,6 @@ public class Employee implements Serializable{
 		this.comm = comm;
 		this.dept = dept;
 	}
-
 
 	public Integer getEmpNo() {
 		return empNo;

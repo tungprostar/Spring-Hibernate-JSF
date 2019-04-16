@@ -12,5 +12,5 @@ public interface EmployeeService {
 	void delete(int id);
 	void addOrUpdate(Employee emp);
 	String formatDate(Date d);
-	
+
 }
