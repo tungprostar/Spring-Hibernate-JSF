@@ -24,8 +24,6 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	private List<Employee> lstEmpFormat = new ArrayList<Employee>();
-
 	private String jobName;
 	private Date hireDate;
 
@@ -35,14 +33,6 @@ public class EmployeeController {
 
 	public void setLstEmp(List<Employee> lstEmp) {
 		this.lstEmp = lstEmp;
-	}
-
-	public List<Employee> getLstEmpFormat() {
-		return lstEmpFormat;
-	}
-
-	public void setLstEmpFormat(List<Employee> lstEmpFormat) {
-		this.lstEmpFormat = lstEmpFormat;
 	}
 
 	public String getJobName() {
@@ -78,8 +68,11 @@ public class EmployeeController {
 
 	public void formatList(String jobName, Date hireDate) throws Exception {
 		System.out.println(jobName + "" +hireDate);
-		employeeService.formatList(jobName, hireDate);
+		lstEmp = employeeService.formatList(jobName, hireDate);
+		System.out.println("size: "+lstEmp.size());
 	}
 	
-	
+	public void exportExcel(List<Employee> lstEmp) throws Exception {
+		employeeService.exportExcel(lstEmp);
+	}
 }

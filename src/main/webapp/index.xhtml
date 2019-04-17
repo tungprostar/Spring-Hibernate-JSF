@@ -157,8 +157,10 @@
 			<p:inputText id="fjob" value="#{employeeView.jobName}" />
 			<p:outputLabel for="fhd" value="Hiredate: " />
 			<p:calendar id="fhd" value="#{employeeView.hireDate}" />
-			<p:commandButton value="Filter"
-				action="#{employeeView.formatList(employeeView.jobName, employeeView.hireDate)}" />
+			<p:commandButton value="Search"
+				action="#{employeeView.formatList(employeeView.jobName, employeeView.hireDate)}" update="form2:employeeTable"/>
+			<p:commandButton value="Export Excel"
+				action="#{employeeView.exportExcel(employeeView.lstEmp)}" />
 		</h:panelGrid>
 	</h:form>
 	<hr></hr>
@@ -177,7 +179,8 @@
 				<p:column headerText="Client name" sortBy="#{client.clientName}">
 					<h:outputText value="#{client.clientName}" />
 				</p:column>
-				<p:column headerText="Client phone number" sortBy="#{client.clientPhoneNumber}">
+				<p:column headerText="Client phone number"
+					sortBy="#{client.clientPhoneNumber}">
 					<h:outputText value="#{client.clientPhoneNumber}" />
 				</p:column>
 				<f:facet name="paginatorTopLeft">

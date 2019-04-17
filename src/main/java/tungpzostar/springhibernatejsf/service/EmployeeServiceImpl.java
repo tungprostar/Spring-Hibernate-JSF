@@ -47,12 +47,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@Transactional
-	public void formatList(String jobName, Date hireDate) throws Exception {
+	public List<Employee> formatList(String jobName, Date hireDate) {
 		if(jobName == "") jobName = null;
 		System.out.println("=================>" +jobName +" /" +hireDate);
 		List<Employee> lstEmp = employeeDAO.formatList(jobName, hireDate);
 		System.out.println(lstEmp.size());
 		System.out.println("Service layer: "+jobName + " "+hireDate);
+		
+		return lstEmp;
+	}
+
+	@Override
+	public void exportExcel(List<Employee> lstEmp) throws Exception {
 		fileDAO.writeExcelFile(lstEmp);
 	}
 

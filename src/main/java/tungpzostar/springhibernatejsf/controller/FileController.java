@@ -16,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
+import tungpzostar.springhibernatejsf.dao.ClientDAO;
 import tungpzostar.springhibernatejsf.dao.FileDAO;
 import tungpzostar.springhibernatejsf.entity.Client;
+import tungpzostar.springhibernatejsf.service.ClientService;
 
 @Controller
 @Component(value = "fileView")
@@ -26,6 +28,9 @@ public class FileController {
 
 	@Autowired
 	private FileDAO fileDAO;
+	
+	@Autowired
+	private ClientService clientService;
 	
 	private UploadedFile uploadedFileDM;
 
@@ -72,6 +77,7 @@ public class FileController {
             FacesMessage message = new FacesMessage("Succesful", uploadedFileDM.getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
             lstClient = fileDAO.processFile(uploadedFileDM);
+            clientService.insertAll(lstClient);
         }
     }
 	

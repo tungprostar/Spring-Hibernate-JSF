@@ -41,6 +41,7 @@ public class FileDAOImpl implements FileDAO {
 				System.out.println(strArr[0] +" " + strArr[1]);
 			}
 			bf.close();
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
